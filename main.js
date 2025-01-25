@@ -1,7 +1,7 @@
 // 1. إدخال مقاسات التصميم بالمليمتر
-const designLength = 303; // الطول بالمليمتر (يمكنك تغيير القيمة)
-const designWidth = 607; // العرض بالمليمتر (يمكنك تغيير القيمة)
-const designHeight = 5; // الارتفاع بالمليمتر (يمكنك تغيير القيمة)
+const designLength = 303; // الطول بالمليمتر
+const designWidth = 607; // العرض بالمليمتر
+const designHeight = 5; // الارتفاع بالمليمتر
 
 // 2. إنشاء المشهد (Scene)
 const scene = new THREE.Scene();
@@ -13,7 +13,7 @@ camera.position.set(0, 0, 50); // ضبط موقع الكاميرا
 camera.lookAt(0, 0, 0); // توجيه الكاميرا نحو نقطة الأصل
 
 // 4. إنشاء العارض (Renderer)
-const renderer = new THREE.WebGLRenderer();
+const renderer = new THREE.WebGLRenderer({ antialias: true }); // تفعيل Anti-Aliasing
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
@@ -56,14 +56,13 @@ textureLoader.load('./assets/heightmap.bmp', (texture) => {
     const heightMapMesh = new THREE.Mesh(geometry, material);
 
     // تدوير النموذج ليكون السطح هو الواجهة الأمامية
-    heightMapMesh.rotation.x = -Math.PI / 180; // تدوير حول المحور X ليكون أفقيًا
-    heightMapMesh.rotation.y = Math.PI / 180; // تدوير حول المحور Y لجعل السطح هو الواجهة الأمامية
+    heightMapMesh.rotation.x = -Math.PI / 2; // تدوير حول المحور X ليكون أفقيًا
 
     // ضبط حجم النموذج بناءً على المقاسات المدخلة
     heightMapMesh.scale.set(
-        (designWidth / width) * 0.2, // تصغير العرض
-        (designLength / height) * 0.2, // تصغير الطول
-        0.2 // تصغير الارتفاع
+        (designWidth / width) * 0.1, // تصغير العرض
+        (designLength / height) * 0.1, // تصغير الطول
+        0.1 // تصغير الارتفاع
     );
 
     scene.add(heightMapMesh);
@@ -101,6 +100,8 @@ textureLoader.load('./assets/heightmap.bmp', (texture) => {
 });
 
 // 13. وظائف التحكم
+let autoRotate = false; // حالة التدوير التلقائي
+
 // تغيير زاوية العرض
 function setView(view) {
     switch (view) {
